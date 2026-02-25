@@ -1,15 +1,16 @@
 
 import React from 'react';
-import { 
-  Inbox as InboxIcon, 
-  Star, 
-  Trash2, 
-  Settings, 
+import {
+  Inbox as InboxIcon,
+  Star,
+  Trash2,
+  Settings,
   Layers,
   ChevronRight,
   X,
   Clock,
-  Users
+  Users,
+  Upload
 } from 'lucide-react';
 import { ViewType, User } from '../types';
 
@@ -40,6 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'interested', label: 'Interesados', icon: Star, count: counts.interested, color: 'text-amber-500' },
     { id: 'in_process', label: 'En Proceso', icon: Clock, count: counts.in_process, color: 'text-sky-500' },
     { id: 'trash', label: 'Papelera', icon: Trash2, count: counts.trash, color: 'text-slate-400' },
+    { id: 'bulk_import', label: 'Importar', icon: Upload, count: 0, color: 'text-violet-500' },
     { id: 'users', label: 'Usuarios', icon: Users, count: 0, color: 'text-emerald-500' },
   ];
 

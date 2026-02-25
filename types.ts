@@ -19,4 +19,4 @@ export interface User {
   avatar: string;
 }
 
-export type ViewType = 'inbox' | 'interested' | 'in_process' | 'trash' | 'users' | 'settings';
+export type ViewType = 'inbox' | 'interested' | 'in_process' | 'trash' | 'bulk_import' | 'users' | 'settings';

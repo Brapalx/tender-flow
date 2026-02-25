@@ -7,6 +7,7 @@ import { TenderCard } from './components/TenderCard';
 import { TenderDetail } from './components/TenderDetail';
 import { UserManagement } from './components/UserManagement';
 import { Settings } from './components/Settings';
+import { BulkImport } from './components/BulkImport';
 import { apiService } from './services/apiService';
 import { 
   Search, 
@@ -109,6 +110,11 @@ const App: React.FC = () => {
     }
   }, [tenders, currentUser]);
 
+  const handleBulkImport = useCallback((merged: Tender[]) => {
+    setTenders(merged);
+    setSyncStatus('synced');
+  }, []);
+
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300 overflow-hidden relative">
       <Sidebar activeView={activeView} onViewChange={setActiveView} counts={counts} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} currentUser={currentUser} />
@@ -183,6 +189,8 @@ const App: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map(i => <div key={i} className="h-56 bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse" />)}
               </div>
+            ) : activeView === 'bulk_import' ? (
+              <BulkImport onImport={handleBulkImport} />
             ) : activeView === 'users' ? (
               <UserManagement users={users} currentUser={currentUser} onSwitchUser={setCurrentUser} onUpdateRole={(uid, r) => setUsers(prev => prev.map(u => u.id === uid ? {...u, role: r} : u))} />
             ) : activeView === 'settings' ? (

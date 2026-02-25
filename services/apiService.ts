@@ -83,6 +83,34 @@ export const apiService = {
     }
   },
 
+  async bulkAddTenders(newTenders: Tender[]): Promise<Tender[]> {
+    const normalized = newTenders.map(t => this.normalizeTender(t));
+    const cached = this.getFromCache();
+    const existingIds = new Set(cached.map(t => t.id));
+    const toAdd = normalized.filter(t => !existingIds.has(t.id));
+    const merged = [...toAdd, ...cached];
+    this.saveToCache(merged);
+
+    if (!isPlaceholder(AWS_API_ENDPOINT)) {
+      const results = await Promise.allSettled(
+        toAdd.map(t =>
+          fetch(AWS_API_ENDPOINT, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(t),
+          })
+        )
+      );
+      const failed = results.filter(r => r.status === 'rejected').length;
+      if (failed > 0) {
+        console.warn(`Bulk upload: ${failed}/${toAdd.length} failed to sync to API`);
+      }
+    }
+
+    return merged;
+  },
+
   saveToCache(tenders: Tender[]) {
     localStorage.setItem('tenderpulse_cache', JSON.stringify(tenders));
   },
